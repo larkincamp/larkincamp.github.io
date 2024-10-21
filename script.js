@@ -1,10 +1,31 @@
 function filterData() {
   event.preventDefault();
+
   var startdate = document.getElementById("startdate").value;
   var enddate = document.getElementById("enddate").value;
-  console.log(startdate);
-  console.log(enddate);
+
+  // Convert the input dates to Date objects for easier comparison
+  var start = new Date(startdate);
+  var end = new Date(enddate);
+
+  // Get all rows in the table
+  var tableRows = document.querySelectorAll("#pitch-data tr");
+
+  tableRows.forEach(function(row) {
+      var dateCell = row.cells[1]; // Assuming the Date column is the second column (index 1)
+      var rowDate = new Date(dateCell.textContent); // Convert the row's date to a Date object
+
+      // Check if the row's date is within the specified range
+      if (rowDate >= start && rowDate <= end) {
+          row.style.display = ""; // Show row if it's within the date range
+      } else {
+          row.style.display = "none"; // Hide row if it's outside the date range
+      }
+  });
+
+  console.log("Filtered by date range: " + startdate + " to " + enddate);
 }
+
 
 // Fetch data from the provided URL and populate the table
 async function fetchPitchData() {
